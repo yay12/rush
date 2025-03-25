@@ -32,12 +32,12 @@ import 'codemirror/keymap/vim.js';
 /**
  * A boolean indicating whether the platform is Mac.
  */
-const IS_MAC = !!navigator.platform.match(/Mac/i);
+var IS_MAC = !!navigator.platform.match(/Mac/i);
 
 /**
  * Initialization data for the jupyterlab_vim extension.
  */
-const extension: JupyterFrontEndPlugin<void> = {
+var extension: JupyterFrontEndPlugin<void> = {
     id: 'jupyterlab_vim',
     autoStart: true,
     activate: activateCellVim,
@@ -59,7 +59,7 @@ class VimCell {
         // }
         let activeCell = this._tracker.activeCell;
         if (activeCell !== null) {
-            const {commands} = this._app;
+            var {commands} = this._app;
             let editor = activeCell.editor as CodeMirrorEditor;
             editor.setOption('keyMap', 'vim');
             let extraKeys = editor.getOption('extraKeys') || {};
@@ -192,10 +192,10 @@ class VimCell {
 function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promise<void> {
 
     Promise.all([app.restored]).then(([args]) => {
-        const { commands, shell } = app;
+        var { commands, shell } = app;
         function getCurrent(args: ReadonlyJSONObject): NotebookPanel | null {
-            const widget = tracker.currentWidget;
-            const activate = args['activate'] !== false;
+            var widget = tracker.currentWidget;
+            var activate = args['activate'] !== false;
 
             if (activate && widget) {
                 shell.activateById(widget.id);
@@ -211,10 +211,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('run-select-next-edit', {
             label: 'Run Cell and Edit Next Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { context, content } = current;
+                    var { context, content } = current;
                     NotebookActions.runAndAdvance(content, context.session);
                     current.content.mode = 'edit';
                 }
@@ -224,10 +224,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('run-cell-and-edit', {
             label: 'Run Cell and Edit Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { context, content } = current;
+                    var { context, content } = current;
                     NotebookActions.run(content, context.session);
                     current.content.mode = 'edit';
                 }
@@ -237,10 +237,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('cut-cell-and-edit', {
             label: 'Cut Cell(s) and Edit Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     NotebookActions.cut(content);
                     content.mode = 'edit';
                 }
@@ -250,10 +250,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('copy-cell-and-edit', {
             label: 'Copy Cell(s) and Edit Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     NotebookActions.copy(content);
                     content.mode = 'edit';
                 }
@@ -263,10 +263,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('paste-cell-and-edit', {
             label: 'Paste Cell(s) and Edit Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     NotebookActions.paste(content, 'below');
                     content.mode = 'edit';
                 }
@@ -276,10 +276,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('merge-and-edit', {
             label: 'Merge and Edit Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     NotebookActions.mergeCells(content);
                     current.content.mode = 'edit';
                 }
@@ -289,10 +289,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('enter-insert-mode', {
             label: 'Enter Insert Mode',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     if (content.activeCell !== null) {
                         let editor = content.activeCell.editor as CodeMirrorEditor;
                         current.content.mode = 'edit';
@@ -305,10 +305,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('leave-insert-mode', {
             label: 'Leave Insert Mode',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     if (content.activeCell !== null) {
                         let editor = content.activeCell.editor as CodeMirrorEditor;
                         (CodeMirror as any).Vim.handleKey(editor.editor, '<Esc>');
@@ -320,10 +320,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('select-below-execute-markdown', {
             label: 'Execute Markdown and Select Cell Below',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     if (content.activeCell !== null &&
                         content.activeCell.model.type === 'markdown') {
                         (current.content.activeCell as MarkdownCell).rendered = true;
@@ -336,10 +336,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('select-above-execute-markdown', {
             label: 'Execute Markdown and Select Cell Below',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     if (content.activeCell !== null &&
                         content.activeCell.model.type === 'markdown') {
                         (current.content.activeCell as MarkdownCell).rendered = true;
@@ -352,10 +352,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('select-first-cell', {
             label: 'Select First Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     content.activeCellIndex = 0;
                     content.deselectAll();
                     if (content.activeCell !== null) {
@@ -371,10 +371,10 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('select-last-cell', {
             label: 'Select Last Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current) {
-                    const { content } = current;
+                    var { content } = current;
                     content.activeCellIndex = current.content.widgets.length - 1;
                     content.deselectAll();
                     if (content.activeCell !== null) {
@@ -390,7 +390,7 @@ function activateCellVim(app: JupyterFrontEnd, tracker: INotebookTracker): Promi
         commands.addCommand('center-cell', {
             label: 'Center Cell',
             execute: args => {
-                const current = getCurrent(args);
+                var current = getCurrent(args);
 
                 if (current && current.content.activeCell != null) {
                     let er = current.content.activeCell.inputArea.node.getBoundingClientRect();
